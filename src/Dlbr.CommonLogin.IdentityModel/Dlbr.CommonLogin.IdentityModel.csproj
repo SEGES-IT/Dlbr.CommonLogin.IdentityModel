@@ -7,6 +7,8 @@
     <Authors>SEGES</Authors>
     <Company>SEGES</Company>
     <Description>-</Description>
+    <DebugType>pdbonly</DebugType>
+    <DebugSymbols>True</DebugSymbols>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,5 +18,15 @@
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="bin/**/*.pdb">
+        <IncludeInPackage>true</IncludeInPackage>
+    </Content>
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="%userprofile%\.nuget\packages\gitlink\3.0.0\build\gitlink.exe $(TargetDir)\$(TargetName).pdb" />
+  </Target>
 
 </Project>
