@@ -20,13 +20,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="bin/**/*.pdb">
-        <IncludeInPackage>true</IncludeInPackage>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="gitlink" Version="3.0.0" />
+    <PackageReference Include="gitlink" Version="3.0.0">
+      <ExcludeAssets>All</ExcludeAssets>
+    </PackageReference>
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
