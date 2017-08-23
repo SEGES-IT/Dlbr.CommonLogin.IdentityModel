@@ -25,6 +25,10 @@
     </Content>
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="gitlink" Version="3.0.0" />
+  </ItemGroup>
+
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="%userprofile%\.nuget\packages\gitlink\3.0.0\build\gitlink.exe $(TargetDir)\$(TargetName).pdb" />
   </Target>
