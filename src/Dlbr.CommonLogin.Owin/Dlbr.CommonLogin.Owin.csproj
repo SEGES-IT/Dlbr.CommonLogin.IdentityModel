@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net451</TargetFramework>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Version>1.0.0</Version>
     <Authors>SEGES</Authors>
     <Company>SEGES</Company>
@@ -32,17 +32,10 @@
     <PackageReference Include="Newtonsoft.Json" Version="[9.0.1,10)" />
     <PackageReference Include="Owin" Version="1.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="[4.0.3.308261200,5)" />
-    <PackageReference Include="gitlink" Version="3.0.0">
-      <ExcludeAssets>All</ExcludeAssets>
-    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Dlbr.CommonLogin.IdentityModel\Dlbr.CommonLogin.IdentityModel.csproj" />
   </ItemGroup>
-
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="%userprofile%\.nuget\packages\gitlink\3.0.0\build\gitlink.exe $(TargetDir)\$(TargetName).pdb" />
-  </Target>
 
 </Project>

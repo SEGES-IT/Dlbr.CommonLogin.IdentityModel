@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net45</TargetFramework>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Version>1.0.0</Version>
     <Authors>SEGES</Authors>
     <Company>SEGES</Company>
@@ -22,13 +22,6 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Web.Infrastructure" version="1.0.0.0" />
-    <PackageReference Include="gitlink" Version="3.0.0">
-      <ExcludeAssets>All</ExcludeAssets>
-    </PackageReference>
   </ItemGroup>
-
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="%userprofile%\.nuget\packages\gitlink\3.0.0\build\gitlink.exe $(TargetDir)\$(TargetName).pdb" />
-  </Target>
 
 </Project>
