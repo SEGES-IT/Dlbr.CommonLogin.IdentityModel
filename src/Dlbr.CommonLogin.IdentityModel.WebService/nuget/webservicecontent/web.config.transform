@@ -1,0 +1,22 @@
+<configuration>
+  <microsoft.identityModel>
+    <service saveBootstrapTokens="true">
+      <certificateValidation certificateValidationMode="None"/>
+      <serviceCertificate>
+        <certificateReference storeLocation="LocalMachine" storeName="My" x509FindType="FindBySubjectDistinguishedName" findValue="CN=cookieprotection.vfl.local"/>
+      </serviceCertificate>
+      <securityTokenHandlers>
+        <remove type="Microsoft.IdentityModel.Tokens.Saml11.Saml11SecurityTokenHandler, Microsoft.IdentityModel, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
+      <add type="Microsoft.IdentityModel.Tokens.Saml11.Saml11SecurityTokenHandler, Microsoft.IdentityModel, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+        <samlSecurityTokenRequirement issuerCertificateValidationMode="None"
+                                      issuerCertificateRevocationMode="NoCheck"
+                                      issuerCertificateTrustedStoreLocation="LocalMachine"
+                                      mapToWindows="false"
+                                      useWindowsTokenService="false">
+          <nameClaimType value="http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier" />
+        </samlSecurityTokenRequirement>
+      </add>
+      </securityTokenHandlers>
+    </service>
+  </microsoft.identityModel>
+</configuration>

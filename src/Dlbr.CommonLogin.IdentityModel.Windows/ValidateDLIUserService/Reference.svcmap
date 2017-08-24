@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="27ae22f2-7d56-43e1-8176-9be30afb5d2b" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>false</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="https://localhost.vfltest.dk/LoginServices/ValidateUser.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="ValidateUser.wsdl" MetadataType="Wsdl" ID="9d8cd8f8-0e0e-4d4b-a842-eb32c8a79348" SourceId="1" SourceUrl="http://localhost.vfltest.dk/LoginServices/ValidateUser.svc?wsdl" />
+    <MetadataFile FileName="ValidateUser.xsd" MetadataType="Schema" ID="d4492da7-cd10-451d-8e18-b28813eb1072" SourceId="1" SourceUrl="http://localhost.vfltest.dk/LoginServices/ValidateUser.svc?xsd=xsd1" />
+    <MetadataFile FileName="ValidateUser.disco" MetadataType="Disco" ID="839f6437-82a1-4f5d-8eb5-96eaff794dea" SourceId="1" SourceUrl="http://localhost.vfltest.dk/LoginServices/ValidateUser.svc?disco" />
+    <MetadataFile FileName="ValidateUser1.xsd" MetadataType="Schema" ID="f9cef2ad-fe53-4be0-a09d-5018f1cf4236" SourceId="1" SourceUrl="http://localhost.vfltest.dk/LoginServices/ValidateUser.svc?xsd=xsd0" />
+    <MetadataFile FileName="ValidateUser1.wsdl" MetadataType="Wsdl" ID="e0387e24-7438-4e0b-babd-d019f0a0df73" SourceId="1" SourceUrl="http://localhost.vfltest.dk/LoginServices/ValidateUser.svc?wsdl=wsdl0" />
+    <MetadataFile FileName="ValidateUser2.xsd" MetadataType="Schema" ID="3a35afd4-cc2d-483e-921d-9e16d9014226" SourceId="1" SourceUrl="http://localhost.vfltest.dk/LoginServices/ValidateUser.svc?xsd=xsd2" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

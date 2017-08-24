@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <version>$version$</version>
+    <authors>VFL</authors>
+    <owners>VFL</owners>
+    <id>Dlbr.CommonLogin.IdentityModel.WebService</id>
+    <title />
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Dlbr WIF components for web services</description>
+    <language>en-US</language>
+    <tags>WIF</tags>
+    <dependencies>
+      <dependency id="Dlbr.CommonLogin.IdentityModel" version="[$version$]" />
+    </dependencies>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="System.IdentityModel" targetFramework="net45" />
+      <frameworkAssembly assemblyName="System.IdentityModel.Services" targetFramework="net45" />
+    </frameworkAssemblies>
+  </metadata>
+  <files>
+    <file src="..\bin\$configuration$\Dlbr.CommonLogin.IdentityModel.WebService.dll" target="lib\net45\" />
+    <file src="..\bin\$configuration$\Dlbr.CommonLogin.IdentityModel.WebService.pdb" target="lib\net45\" />
+    <file src="webservicecontent\web.config.transform" target="content\" />
+  </files>
+</package>

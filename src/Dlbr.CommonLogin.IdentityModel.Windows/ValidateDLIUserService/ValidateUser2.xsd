@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://commonlogin.ws.dlbr.dk/security/ws/FaultContracts/2012/09" elementFormDefault="qualified" targetNamespace="http://commonlogin.ws.dlbr.dk/security/ws/FaultContracts/2012/09" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:complexType name="SecurityFault">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Reason" type="tns:SecurityFaultReason" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="SecurityFault" nillable="true" type="tns:SecurityFault" />
+  <xs:simpleType name="SecurityFaultReason">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="UserNameOrPasswordIncorrect" />
+      <xs:enumeration value="PasswordHasExpired" />
+      <xs:enumeration value="AccountDisabled" />
+      <xs:enumeration value="AccountLockedOut" />
+      <xs:enumeration value="PasswordMustChange" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="SecurityFaultReason" nillable="true" type="tns:SecurityFaultReason" />
+</xs:schema>

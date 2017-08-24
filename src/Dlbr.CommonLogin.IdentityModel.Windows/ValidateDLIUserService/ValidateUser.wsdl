@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://commonlogin.ws.dlbr.dk/security/ws/2012/09/DLILogon" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:i0="http://tempuri.org/" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="ValidateUser" targetNamespace="http://commonlogin.ws.dlbr.dk/security/ws/2012/09/DLILogon" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:import namespace="http://tempuri.org/" location="http://localhost.vfltest.dk/LoginServices/ValidateUser.svc?wsdl=wsdl0" />
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://commonlogin.ws.dlbr.dk/security/ws/2012/09/DLILogon/Imports">
+      <xsd:import schemaLocation="http://localhost.vfltest.dk/LoginServices/ValidateUser.svc?xsd=xsd0" namespace="http://commonlogin.ws.dlbr.dk/security/ws/2012/09/DLILogon" />
+      <xsd:import schemaLocation="http://localhost.vfltest.dk/LoginServices/ValidateUser.svc?xsd=xsd2" namespace="http://commonlogin.ws.dlbr.dk/security/ws/FaultContracts/2012/09" />
+      <xsd:import schemaLocation="http://localhost.vfltest.dk/LoginServices/ValidateUser.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="IValidateUser_ValidateDliUser_InputMessage">
+    <wsdl:part name="parameters" element="tns:ValidateDliUser" />
+  </wsdl:message>
+  <wsdl:message name="IValidateUser_ValidateDliUser_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ValidateDliUserResponse" />
+  </wsdl:message>
+  <wsdl:message name="IValidateUser_ValidateDliUser_SecurityFaultFault_FaultMessage">
+    <wsdl:part xmlns:q1="http://commonlogin.ws.dlbr.dk/security/ws/FaultContracts/2012/09" name="detail" element="q1:SecurityFault" />
+  </wsdl:message>
+  <wsdl:portType name="IValidateUser">
+    <wsdl:operation name="ValidateDliUser">
+      <wsdl:input wsaw:Action="http://commonlogin.ws.dlbr.dk/security/ws/2012/09/DLILogon/IValidateUser/ValidateDliUser" message="tns:IValidateUser_ValidateDliUser_InputMessage" />
+      <wsdl:output wsaw:Action="http://commonlogin.ws.dlbr.dk/security/ws/2012/09/DLILogon/IValidateUser/ValidateDliUserResponse" message="tns:IValidateUser_ValidateDliUser_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://commonlogin.ws.dlbr.dk/security/ws/2012/09/DLILogon/IValidateUser/ValidateDliUserSecurityFaultFault" name="SecurityFaultFault" message="tns:IValidateUser_ValidateDliUser_SecurityFaultFault_FaultMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:service name="ValidateUser">
+    <wsdl:port name="BasicHttpBinding_IValidateUser" binding="i0:BasicHttpBinding_IValidateUser">
+      <soap:address location="https://localhost.vfltest.dk/LoginServices/ValidateUser.svc" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
