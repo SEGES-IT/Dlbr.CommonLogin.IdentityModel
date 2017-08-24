@@ -6,12 +6,11 @@
 var target = Argument("target", "Default");
 var configuration = "Release";
 var output = Directory("build");
-var outputNuGet = output + Directory("nuget");
 var solutions = GetFiles("./**/*.sln");
 
 Task("Default")
-    //.IsDependentOn("Package");
-    .IsDependentOn("GitLink");
+    .IsDependentOn("Clean")
+    .IsDependentOn("Package");
 
 Task("Clean")
     .Does(() =>
@@ -21,10 +20,11 @@ Task("Clean")
             DotNetCoreClean(solution.GetDirectory().FullPath, new DotNetCoreCleanSettings{Configuration = "Debug"});
             DotNetCoreClean(solution.GetDirectory().FullPath, new DotNetCoreCleanSettings{Configuration = "Release"});
         }
+        CleanDirectory(output);
     });
 
 Task("Build")
-    .IsDependentOn("Clean")
+    .IsDependentOn("Restore")
     .Does(() =>
     {
         foreach(var solution in solutions)
@@ -35,46 +35,70 @@ Task("Build")
         }
     });
 
+Task("Test")
+    .IsDependentOn("Build")
+    .Does(() =>
+    {
+        foreach(var solution in solutions)
+        {
+            var testProjects = GetFiles(solution.GetDirectory().FullPath + "/**/bin/**/*Tests.dll");
+            foreach (var testProject in testProjects)
+            {
+                //DotNetCoreTest(testProject.FullPath, new DotNetCoreTestSettings {
+                //    Configuration = configuration,
+                //});
+                NUnit3(testProject.FullPath, new NUnit3Settings {
+                    Configuration = configuration,
+                    Full = true,
+                    TeamCity = true,
+                    Where = "cat==BuildVerification"
+                });
+            }
+        }
+    });
+
+Task("Restore")
+    .Does(() =>
+    {
+        foreach(var solution in solutions)
+        {
+            DotNetCoreRestore(solution.GetDirectory().FullPath, new DotNetCoreRestoreSettings {
+            });
+        }
+    });
+
+
 Task("GitLink")
     .IsDependentOn("Build")
     .Does(() =>
     {
-//        Information(baseDir);
         var pdbsInSolution = GetFiles(Context.Environment.WorkingDirectory + "/src/**/*.pdb");
-        //foreach(var solution in solutions)
+	    Func<FilePath, bool> recentlyUpdated = (FilePath f) => (DateTime.UtcNow.Subtract(new FileInfo(f.FullPath).LastWriteTimeUtc).TotalMinutes < 5);
+	    foreach (var pdb in pdbsInSolution.Where(recentlyUpdated))
         {
-            //Information(solution.GetDirectory().FullPath)
-            //GitLink(solution.GetDirectory().FullPath + "/", new GitLinkSettings {});
-
-            //var pdbsInSolution = GetFiles(solution.GetDirectory().FullPath + "/**/*.pdb");
-
-            foreach (var pdb in pdbsInSolution.Where(f => (DateTime.UtcNow.Subtract(new FileInfo(f.FullPath).LastWriteTimeUtc).TotalMinutes < 5)))
-            //foreach (var pdb in pdbsInSolution)
-            {
-                Information(DateTime.UtcNow.Subtract(new FileInfo(pdb.FullPath).LastWriteTimeUtc).TotalMinutes);
-                GitLink(pdb.FullPath, new GitLinkSettings {});
-                // While waiting for https://github.com/cake-build/cake/issues/1734
-                //var gitLink = Context.Tools.Resolve("gitlink.exe");
-                //Information(gitLink);
-
-                 //StartProcess(gitLink, new ProcessSettings { Arguments = pdb.FullPath + " --baseDir .."});
-            }
+            GitLink(pdb.FullPath, new GitLinkSettings {});
         }
     });
 
 
 Task("Package")
+    .IsDependentOn("Test")
     .IsDependentOn("GitLink")
     .Does(() =>
     {
         foreach(var solution in solutions)
         {
-            DotNetCorePack(solution.GetDirectory().FullPath, new DotNetCorePackSettings {
-                Configuration = configuration,
-                OutputDirectory = outputNuGet,
-                IncludeSymbols = true,
-                NoBuild = true
-            });
+    	    Func<FilePath, bool> notTestProject = (FilePath f) => (!f.FullPath.EndsWith("Tests.csproj"));
+            var csprojsInSolution = GetFiles(solution.GetDirectory().FullPath + "/**/*.csproj").Where(notTestProject);
+            foreach (var csProj in csprojsInSolution)
+            {
+                DotNetCorePack(csProj.GetDirectory().FullPath, new DotNetCorePackSettings {
+                    Configuration = configuration,
+                    OutputDirectory = output,
+                    IncludeSymbols = true,
+                    NoBuild = true
+                });
+            }
         }
 });
 

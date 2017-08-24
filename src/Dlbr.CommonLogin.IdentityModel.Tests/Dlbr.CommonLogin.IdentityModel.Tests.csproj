@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net461</TargetFramework>
@@ -7,8 +7,6 @@
     <Authors>SEGES</Authors>
     <Company>SEGES</Company>
     <Description>-</Description>
-    <DebugType>pdbonly</DebugType>
-    <DebugSymbols>True</DebugSymbols>
   </PropertyGroup>
 
   <ItemGroup>
@@ -41,25 +39,32 @@
     <PackageReference Include="Microsoft.SqlServer.Compact" version="4.0.8876.1" />
     <PackageReference Include="Microsoft.Web.Infrastructure" version="1.0.0.0" />
     <PackageReference Include="Newtonsoft.Json" version="9.0.1" />
-    <PackageReference Include="NUnit" version="3.5.0" />
-    <PackageReference Include="NUnit.Console" version="3.5.0" />
-    <PackageReference Include="NUnit.ConsoleRunner" version="3.5.0" />
-    <PackageReference Include="NUnit.Extension.NUnitProjectLoader" version="3.5.0" />
-    <PackageReference Include="NUnit.Extension.NUnitV2Driver" version="3.5.0" />
-    <PackageReference Include="NUnit.Extension.NUnitV2ResultWriter" version="3.5.0" />
+    <PackageReference Include="NUnit" version="3.7.1" />
+    <PackageReference Include="NUnit.Console" version="3.7.0" />
+    <PackageReference Include="NUnit.ConsoleRunner" version="3.7.0" />
+    <PackageReference Include="NUnit.Extension.NUnitProjectLoader" version="3.6.0" />
+    <PackageReference Include="NUnit.Extension.NUnitV2Driver" version="3.7.0" />
+    <PackageReference Include="NUnit.Extension.NUnitV2ResultWriter" version="3.6.0" />
     <PackageReference Include="NUnit.Extension.TeamCityEventListener" version="1.0.2" />
-    <PackageReference Include="NUnit.Extension.VSProjectLoader" version="3.5.0" />
+    <PackageReference Include="NUnit.Extension.VSProjectLoader" version="3.6.0" />
     <PackageReference Include="Owin" version="1.0" />
     <PackageReference Include="System.Spatial" version="5.8.0" />
     <PackageReference Include="Unity" version="4.0.1" />
     <PackageReference Include="XmlSpecificationCompare" version="1.0.2" />
-  </ItemGroup>
+    <PackageReference Include="NUnit3TestAdapter" Version="3.8.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0" />
+    
+   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Dlbr.CommonLogin.IdentityModel.Web\Dlbr.CommonLogin.IdentityModel.Web.csproj" />
     <ProjectReference Include="..\Dlbr.CommonLogin.IdentityModel.Windows\Dlbr.CommonLogin.IdentityModel.Windows.csproj" />
     <ProjectReference Include="..\Dlbr.CommonLogin.IdentityModel\Dlbr.CommonLogin.IdentityModel.csproj" />
     <ProjectReference Include="..\Dlbr.CommonLogin.Owin\Dlbr.CommonLogin.Owin.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
   </ItemGroup>
 
 

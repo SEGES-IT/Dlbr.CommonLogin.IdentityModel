@@ -12,7 +12,6 @@ using NUnit.Framework;
 namespace Dlbr.CommonLogin.IdentityModel.Tests.Unit.IdentityModel.Web
 {
     [TestFixture]
-    [Category("BuildVerification")]
     public class DatabaseSecurityTokenCacheTests
     {
         static readonly object[] CacheAndStoreTestCases = new object[]
