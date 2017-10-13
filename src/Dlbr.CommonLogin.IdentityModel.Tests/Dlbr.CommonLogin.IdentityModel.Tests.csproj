@@ -38,7 +38,7 @@
     <PackageReference Include="Microsoft.Owin.Testing" version="3.0.1" />
     <PackageReference Include="Microsoft.SqlServer.Compact" version="4.0.8876.1" />
     <PackageReference Include="Microsoft.Web.Infrastructure" version="1.0.0.0" />
-    <PackageReference Include="Newtonsoft.Json" version="9.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
     <PackageReference Include="NUnit" version="3.7.1" />
     <PackageReference Include="NUnit.Console" version="3.7.0" />
     <PackageReference Include="NUnit.ConsoleRunner" version="3.7.0" />
