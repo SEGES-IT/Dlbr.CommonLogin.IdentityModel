@@ -6,31 +6,31 @@ using Seges.IdentityModel.WsTrust;
 
 namespace Seges.IdentityModel.WebApi
 {
-    public class WsTrustTokenProvider<TConfiguration> where TConfiguration : WebApiConfiguration
+    public class WsTrustTokenProvider
     {
-        private static readonly ILog Log = LogProvider.For<WebApiClient<TConfiguration>>();
+        private static readonly ILog Log = LogProvider.For<WsTrustTokenProvider>();
 
         private readonly WsTrustClient _wsTrustClient;
-        private readonly TConfiguration _configuration;
         private SamlTokenResponse _token = new SamlTokenResponse(string.Empty, string.Empty);
         private DateTime _expires = DateTime.MinValue;
+        private readonly WsTrustConfiguration _configuration;
 
-        public WsTrustTokenProvider(TConfiguration configuration)
+        public WsTrustTokenProvider(WsTrustConfiguration configuration)
         {
             _configuration = configuration;
-            _wsTrustClient = new WsTrustClient(configuration.WsTrustConfiguration.AdfsDns);
+            _wsTrustClient = new WsTrustClient(configuration.AdfsDns);
         }
 
-        public async Task RefreshToken()
+        public virtual async Task RefreshToken()
         {
             Log.Debug("Refreshing token");
             var response = await _wsTrustClient.RequestTokenAsync(new SamlTokenRequest()
             {
-                Username = _configuration.WsTrustConfiguration.Username,
-                Password = _configuration.WsTrustConfiguration.Password,
-                Audience = _configuration.WsTrustConfiguration.Audience
+                Username = _configuration.Username,
+                Password = _configuration.Password,
+                Audience = _configuration.Audience
             });
-            _expires = DateTime.UtcNow.Add(_configuration.WsTrustConfiguration.TokenCacheTime);
+            _expires = DateTime.UtcNow.Add(_configuration.TokenCacheTime);
             Log.Debug($"Token expires at {_expires:o}");
             _token = response;
         }

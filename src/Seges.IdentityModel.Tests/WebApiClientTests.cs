@@ -20,37 +20,40 @@ namespace Seges.IdentityModel.Tests
                 .CreateLogger();
         }
 
-        private class LdkWebApiConfiguration : WebApiConfiguration
+        private class LdkDeflatedSamlWebApiConfiguration : DeflatedSamlWebApiConfiguration
         {
-
+            public LdkDeflatedSamlWebApiConfiguration(WsTrustTokenProvider tokenProvider) : base(tokenProvider)
+            {
+            }
         }
 
         [Test]
         public void CanCallApi()
         {
-            var configuration = new LdkWebApiConfiguration
-            {
-                WsTrustConfiguration = new WsTrustConfiguration(
+            var configuration = new LdkDeflatedSamlWebApiConfiguration(new WsTrustTokenProvider(
+                new WsTrustConfiguration(
                     username: "cvruser1",
                     password: "Pass1word",
                     audience: "https://devtest-www-ldk3.vfltest.dk",
                     adfsDns: "si-idp.vfltest.dk",
                     tokenCacheTime: TimeSpan.FromMinutes(15)
-                ),
-                ServiceBaseUri = new Uri("https://devtest-www-ldk3.vfltest.dk/")
+                )))
+            {
+                Endpoint = null//new Uri("https://devtest-www-ldk3.vfltest.dk/")
             };
-            var sut = new WebApiClient<LdkWebApiConfiguration>(
-                configuration, 
-                new HttpClient(), 
-                new WsTrustTokenProvider<LdkWebApiConfiguration>(configuration));
 
+
+            var sut = new WebApiClient<LdkDeflatedSamlWebApiConfiguration>(
+                configuration,
+                new HttpClient());
             var response = sut.Get<LdkCurrentUser>("/Profile/CurrentUser").Result;
             Assert.IsNotNull(response);
-            Assert.AreEqual("cvruser1@PROD.DLI", response.nameidentifier.SingleOrDefault());
+            response.EnsureSuccessStatusCode();
+            Assert.AreEqual("cvruser1@PROD.DLI", response.Typed.nameidentifier.SingleOrDefault());
 
             response = sut.Get<LdkCurrentUser>("/Profile/CurrentUser").Result;
             Assert.IsNotNull(response);
-            Assert.AreEqual("cvruser1@PROD.DLI", response.nameidentifier.SingleOrDefault());
+            Assert.AreEqual("cvruser1@PROD.DLI", response.Typed.nameidentifier.SingleOrDefault());
         }
     }
 

@@ -1,7 +1,6 @@
 ﻿using System;
 using Seges.IdentityModel.Utils;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -9,18 +8,23 @@ using Seges.IdentityModel.Log.Logging;
 
 namespace Seges.IdentityModel.WebApi
 {
-    public class WebApiClient<TConfiguration> where TConfiguration : WebApiConfiguration
+    public class WebApiClient<TConfiguration> where TConfiguration : IWebApiConfiguration, IHttpRequestMessagePreparer
     {
         private static readonly ILog Log = LogProvider.For<WebApiClient<TConfiguration>>();
 
         private readonly HttpClient _httpClient;
-        private readonly WsTrustTokenProvider<TConfiguration> _tokenProvider;
+        private readonly TConfiguration _configuration;
 
-        public WebApiClient(TConfiguration configuration, HttpClient httpClient, WsTrustTokenProvider<TConfiguration> tokenProvider) 
+        public WebApiClient(TConfiguration configuration, HttpClient httpClient) 
         {
-            _httpClient = httpClient;
-            _httpClient.BaseAddress = configuration.ServiceBaseUri;
-            _tokenProvider = tokenProvider;
+            _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+            if (configuration == null) throw new ArgumentNullException(nameof(configuration));
+            if (configuration.Endpoint == null) throw new ArgumentNullException($"{nameof(configuration)}.{nameof(configuration.Endpoint)}");
+            if (!configuration.Endpoint.IsAbsoluteUri)
+            {
+                throw new ArgumentOutOfRangeException(nameof(configuration),$"configuration.Endpoint value ({configuration.Endpoint}) should be an absolute Uri");
+            }
+            _configuration = configuration;
         }
 
         public StringContent JsonSerialize<T>(T payload)
@@ -30,40 +34,37 @@ namespace Seges.IdentityModel.WebApi
             return content;
         }
 
-        public T JsonDeserialize<T>(string buffer)
-        {
-            try
-            {
-                return JsonConvert.DeserializeObject<T>(buffer);
-            }
-            catch (JsonException ex)
-            {
-                throw new Exception($"Unable to deserialize type {typeof(T).FullName} from JSON {buffer}", ex);
-            }
-        }
-
-
-        public async Task<TResult> PostAsJson<TResult,T>(string relativeUri, T request)
+        public async Task<WebApiResponse<TResult>> PostAsJson<TResult,T>(string relativeUri, T request)
         {
             var payload = JsonSerialize(request);
-            var responsePair = await SendAuthenticatedAsync(relativeUri, HttpMethod.Post, payload);
-            responsePair.Item1.EnsureSuccessStatusCode(responsePair.Item2);
-            var obj = JsonDeserialize<TResult>(responsePair.Item2);
-            return obj;
+            var responsePair = await SendPreparedAsync(relativeUri, HttpMethod.Post, payload);
+            return new WebApiResponse<TResult>(responsePair.Item1, responsePair.Item2);
         }
 
-        public async Task<TResult> Get<TResult>(string relativeUri)
+        public async Task<WebApiResponse> PostAsJsonFireAndForget<T>(string relativeUri, T request)
         {
-            var responsePair = await SendAuthenticatedAsync(relativeUri);
-            responsePair.Item1.EnsureSuccessStatusCode(responsePair.Item2);
-            var obj = JsonDeserialize<TResult>(responsePair.Item2);
-            return obj;
+            var payload = JsonSerialize(request);
+            var responsePair = await SendPreparedAsync(relativeUri, HttpMethod.Post, payload);
+            return new WebApiResponse(responsePair.Item1);
         }
-        
-        private async Task<(HttpResponseMessage, string)> SendAuthenticatedAsync(string relativeUri, HttpMethod method = null,  HttpContent content = null)
+
+        public async Task<WebApiResponse<TResult>> Get<TResult>(string relativeUri)
+        {
+            var responsePair = await SendPreparedAsync(relativeUri);
+            return new WebApiResponse<TResult>(responsePair.Item1, responsePair.Item2);
+        }
+
+        public async Task<WebApiResponse> GetFireAndForget(string relativeUri)
+        {
+            var responsePair = await SendPreparedAsync(relativeUri);
+            return new WebApiResponse(responsePair.Item1);
+        }
+
+        private async Task<(HttpResponseMessage, string)> SendPreparedAsync(string relativeUri, HttpMethod method = null,  HttpContent content = null)
         {
             method = method ?? HttpMethod.Get;
-            var requestMessage = new HttpRequestMessage(method, relativeUri);
+            var uri = new Uri(_configuration.Endpoint, new Uri(relativeUri, UriKind.RelativeOrAbsolute));
+            var requestMessage = new HttpRequestMessage(method, uri);
             if (content != null)
             {
                 requestMessage.Content = content;
@@ -72,10 +73,9 @@ namespace Seges.IdentityModel.WebApi
             if (Log.IsDebugEnabled() && content != null)
             {
                 Log.Debug("Content:");
-                Log.Debug(await (content ?? new StringContent("")).ReadAsStringAsync());
+                Log.Debug(await content.ReadAsStringAsync());
             }
-            var token = await _tokenProvider.DeflatedSaml();
-            requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            await _configuration.PrepareRequest(requestMessage);
             var response = await _httpClient.SendAsync(requestMessage);
             Log.Debug($"{(int)response.StatusCode} {response.StatusCode}");
             var responseContent = await response.Content.ReadAsStringAsync();
