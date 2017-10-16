@@ -2,7 +2,7 @@
 
 namespace Seges.IdentityModel.WebApi
 {
-    public class WsTrustConfiguration
+    public class WsTrustConfiguration : IWsTrustConfiguration
     {
         // Bootstrap or not (and credentials for it)
         // Integrated or not (cannot support currently)

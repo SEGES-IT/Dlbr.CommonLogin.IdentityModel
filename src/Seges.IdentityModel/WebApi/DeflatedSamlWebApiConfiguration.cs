@@ -14,8 +14,6 @@ namespace Seges.IdentityModel.WebApi
             _tokenProvider = tokenProvider;
         }
 
-        public WsTrustConfiguration WsTrustConfiguration { get; set; }
-
         public async Task PrepareRequest(HttpRequestMessage requestMessage)
         {
 

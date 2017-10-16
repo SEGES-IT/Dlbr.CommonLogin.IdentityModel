@@ -13,9 +13,9 @@ namespace Seges.IdentityModel.WebApi
         private readonly WsTrustClient _wsTrustClient;
         private SamlTokenResponse _token = new SamlTokenResponse(string.Empty, string.Empty);
         private DateTime _expires = DateTime.MinValue;
-        private readonly WsTrustConfiguration _configuration;
+        private readonly IWsTrustConfiguration _configuration;
 
-        public WsTrustTokenProvider(WsTrustConfiguration configuration)
+        public WsTrustTokenProvider(IWsTrustConfiguration configuration)
         {
             _configuration = configuration;
             _wsTrustClient = new WsTrustClient(configuration.AdfsDns);
