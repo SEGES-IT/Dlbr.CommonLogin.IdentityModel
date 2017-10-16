@@ -31,15 +31,15 @@ namespace Seges.IdentityModel.Tests
         public void CanCallApi()
         {
             var configuration = new LdkDeflatedSamlWebApiConfiguration(new WsTrustTokenProvider(
-                new WsTrustConfiguration(
-                    username: "cvruser1",
-                    password: "Pass1word",
-                    audience: "https://devtest-www-ldk3.vfltest.dk",
-                    adfsDns: "si-idp.vfltest.dk",
-                    tokenCacheTime: TimeSpan.FromMinutes(15)
-                )))
+                new WsTrustConfiguration { 
+                    Username= "cvruser1",
+                    Password= "Pass1word",
+                    Audience= "https://devtest-www-ldk3.vfltest.dk",
+                    AdfsDns= "si-idp.vfltest.dk",
+                    TokenCacheTime= TimeSpan.FromMinutes(15)
+                }))
             {
-                Endpoint = null//new Uri("https://devtest-www-ldk3.vfltest.dk/")
+                Endpoint = new Uri("https://devtest-www-ldk3.vfltest.dk/")
             };
 
 
